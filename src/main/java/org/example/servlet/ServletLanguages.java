@@ -3,7 +3,9 @@ package org.example.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Language;
 import org.example.repository.LanguageRepository;
-import org.example.repository.LanguageRepositoryImpl;
+import org.example.repository.impl.LanguageRepositoryImpl;
+import org.example.service.LanguageService;
+import org.example.service.impl.LanguageServiceImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,16 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(value = "/languages", loadOnStartup = 1)
+@WebServlet(value = "/languages")
 public class ServletLanguages extends HttpServlet {
 
-    private LanguageRepository languageRepository;
+    private LanguageService languageService;
 
     private ObjectMapper objectMapper;
 
     @Override
     public void init() {
-        languageRepository = new LanguageRepositoryImpl();
+        LanguageRepository languageRepository = new LanguageRepositoryImpl();
+        languageService = new LanguageServiceImpl(languageRepository);
         objectMapper = new ObjectMapper();
     }
 
@@ -34,7 +37,7 @@ public class ServletLanguages extends HttpServlet {
         if (languageIdParameter != null) {
             try {
                 long id = Long.parseLong(languageIdParameter);
-                Language language = languageRepository.findById(id);
+                Language language = languageService.findById(id);
 
                 String json;
                 if (language != null) {
@@ -48,7 +51,7 @@ public class ServletLanguages extends HttpServlet {
                 response.getWriter().println(json);
             }
         } else {
-            List<Language> languages = languageRepository.findAll();
+            List<Language> languages = languageService.findAll();
 
             String json = objectMapper.writeValueAsString(languages);
             response.getWriter().println(json);

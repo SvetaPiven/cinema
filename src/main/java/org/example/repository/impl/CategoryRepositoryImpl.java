@@ -1,7 +1,9 @@
-package org.example.repository;
+package org.example.repository.impl;
 
 import org.example.entity.Category;
-import org.example.entity.Film;
+import org.example.repository.BaseRepository;
+import org.example.repository.CategoryRepository;
+import org.example.repository.rowmapper.CategoryRowMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -71,60 +73,30 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
 
     @Override
     public boolean delete(Long id) {
-        final String deleteQuery = "delete from category where id = " + id;
+        final String query = "DELETE FROM category WHERE id = ?";
+        final String linkQuery = "DELETE FROM l_films_category WHERE category_id = ?";
 
         registerDriver();
         try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()
+             PreparedStatement statement = connection.prepareStatement(query);
+             PreparedStatement linkStatement = connection.prepareStatement(linkQuery)
         ) {
-            statement.executeUpdate(deleteQuery);
+            linkStatement.setLong(1, id);
+            linkStatement.executeUpdate();
+
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            return true;
+
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
         }
-        return true;
     }
 
     private Category parseResultSet(ResultSet rs) {
-        Category category;
-
-        try {
-            category = new Category();
-            category.setId(rs.getLong(ID));
-            category.setName(rs.getString(NAME));
-            List<Film> films = getFilmsForCategory(category.getId());
-                    category.setFilms(films);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return category;
-    }
-
-    private List<Film> getFilmsForCategory(Long categoryId) {
-        final String filmsQuery = "SELECT f.id, f.title, f.language_id FROM film f " +
-                "JOIN l_films_category fc ON fc.films_id = f.id " +
-                "JOIN category c ON c.id = fc.category_id " +
-                "WHERE c.id = ?";
-        List<Film> films = new ArrayList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(filmsQuery)
-        ) {
-            preparedStatement.setLong(1, categoryId);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    Film film = new Film();
-                    film.setId(rs.getLong("id"));
-                    film.setTitle(rs.getString("title"));
-                    film.setLanguageId(rs.getLong("language_id"));
-                    films.add(film);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
-        }
-        return films;
+        CategoryRowMapper rowMapper = new CategoryRowMapper(getConnection());
+        return rowMapper.processResultSetCategory(rs);
     }
 }

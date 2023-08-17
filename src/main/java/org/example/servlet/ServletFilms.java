@@ -2,8 +2,14 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Film;
+import org.example.repository.CategoryRepository;
 import org.example.repository.FilmRepository;
-import org.example.repository.FilmRepositoryImpl;
+import org.example.repository.impl.CategoryRepositoryImpl;
+import org.example.repository.impl.FilmRepositoryImpl;
+import org.example.service.CategoryService;
+import org.example.service.FilmService;
+import org.example.service.impl.CategoryServiceImpl;
+import org.example.service.impl.FilmServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,18 +19,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(value = "/films", loadOnStartup = 1)
+@WebServlet(value = "/films")
 public class ServletFilms extends HttpServlet {
 
-    private FilmRepository filmRepository;
+    private CategoryService categoryService;
+
+    private FilmService filmService;
 
     private ObjectMapper objectMapper;
 
     @Override
     public void init() {
-        filmRepository = new FilmRepositoryImpl();
+        CategoryRepository categoryRepository = new CategoryRepositoryImpl();
+        categoryService = new CategoryServiceImpl(categoryRepository);
+
+        FilmRepository filmRepository = new FilmRepositoryImpl();
+        filmService = new FilmServiceImpl(filmRepository);
+
         objectMapper = new ObjectMapper();
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,7 +49,7 @@ public class ServletFilms extends HttpServlet {
         if (filmId != null) {
             try {
                 long id = Long.parseLong(filmId);
-                Film film = filmRepository.findById(id);
+                Film film = filmService.findById(id);
 
                 String json;
                 if (film != null) {
@@ -49,7 +63,7 @@ public class ServletFilms extends HttpServlet {
                 response.getWriter().println(json);
             }
         } else {
-            List<Film> films = filmRepository.findAll();
+            List<Film> films = filmService.findAll();
 
             String json = objectMapper.writeValueAsString(films);
             response.getWriter().println(json);
@@ -66,7 +80,7 @@ public class ServletFilms extends HttpServlet {
         if (filmId != null) {
             try {
                 long id = Long.parseLong(filmId);
-                boolean deleted = filmRepository.delete(id);
+                boolean deleted = filmService.delete(id);
 
                 String jsonResponse;
                 if (deleted) {
@@ -99,7 +113,7 @@ public class ServletFilms extends HttpServlet {
 
         try {
             long id = Long.parseLong(filmIdParameter);
-            Film existingFilm = filmRepository.findById(id);
+            Film existingFilm = filmService.findById(id);
 
             if (existingFilm == null) {
                 String jsonResponse = objectMapper.writeValueAsString("Film not found.");
@@ -130,7 +144,7 @@ public class ServletFilms extends HttpServlet {
                 }
             }
 
-            Film updatedFilm = filmRepository.update(existingFilm);
+            Film updatedFilm = filmService.update(existingFilm);
 
             if (updatedFilm != null) {
                 String jsonResponse = objectMapper.writeValueAsString("Film updated successfully.");
@@ -164,7 +178,7 @@ public class ServletFilms extends HttpServlet {
         newFilm.setTitle(title);
         newFilm.setLanguageId(languageId);
 
-        Film createdFilm = filmRepository.create(newFilm);
+        Film createdFilm = filmService.create(newFilm);
 
         if (createdFilm != null) {
             String jsonResponse = objectMapper.writeValueAsString("Film created successfully.");

@@ -3,9 +3,10 @@ package org.example.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Category;
 import org.example.repository.CategoryRepository;
-import org.example.repository.CategoryRepositoryImpl;
+import org.example.repository.impl.CategoryRepositoryImpl;
+import org.example.service.CategoryService;
+import org.example.service.impl.CategoryServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,16 +15,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@WebServlet(value = "/categories", loadOnStartup = 1)
+@WebServlet(value = "/categories")
 public class ServletCategories extends HttpServlet {
 
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     private ObjectMapper objectMapper;
 
     @Override
     public void init() {
-        categoryRepository = new CategoryRepositoryImpl();
+        CategoryRepository categoryRepository = new CategoryRepositoryImpl();
+        categoryService = new CategoryServiceImpl(categoryRepository);
         objectMapper = new ObjectMapper();
     }
 
@@ -36,7 +38,7 @@ public class ServletCategories extends HttpServlet {
         if (categoryId != null) {
             try {
                 long id = Long.parseLong(categoryId);
-                Category category = categoryRepository.findById(id);
+                Category category = categoryService.findById(id);
 
                 String jsonResponse;
                 jsonResponse = objectMapper.writeValueAsString(Objects.requireNonNullElse(category, "Category not found."));
@@ -46,7 +48,7 @@ public class ServletCategories extends HttpServlet {
                 response.getWriter().println(jsonResponse);
             }
         } else {
-            List<Category> categories = categoryRepository.findAll();
+            List<Category> categories = categoryService.findAll();
 
             String jsonResponse = objectMapper.writeValueAsString(categories);
             response.getWriter().println(jsonResponse);
@@ -62,7 +64,7 @@ public class ServletCategories extends HttpServlet {
         if (categoryId != null) {
             try {
                 long id = Long.parseLong(categoryId);
-                boolean deleted = categoryRepository.delete(id);
+                boolean deleted = categoryService.delete(id);
 
                 String jsonResponse;
                 if (deleted) {
