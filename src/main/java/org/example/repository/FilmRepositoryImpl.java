@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.entity.Category;
 import org.example.entity.Film;
 
 import java.sql.Connection;
@@ -50,6 +51,8 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
             film.setId(rs.getLong(ID));
             film.setTitle(rs.getString(TITLE));
             film.setLanguageId(rs.getLong(LANGUAGE_ID));
+            List<Category> categories = getCategoriesForFilm(film.getId());
+            film.setCategories(categories);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -58,14 +61,40 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
         return film;
     }
 
+    public List<Category> getCategoriesForFilm(Long filmId) {
+        final String categoryQuery = "SELECT c.id, c.name FROM category c " +
+                "JOIN l_films_category fc ON fc.category_id = c.id " +
+                "JOIN film f ON f.id = fc.films_id " +
+                "WHERE f.id = ?";
+        List<Category> categories = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(categoryQuery)
+        ) {
+            preparedStatement.setLong(1, filmId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Category category = new Category();
+                    category.setId(rs.getLong("id"));
+                    category.setName(rs.getString("name"));
+                    categories.add(category);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+        return categories;
+    }
+
     @Override
-    public Film findOne(Long id) {
-        final String findOneQuery = "select * from film where id = " + id;
+    public Film findById(Long id) {
+        final String findByIdQuery = "select * from film where id = " + id;
 
         registerDriver();
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery(findOneQuery)
+             ResultSet rs = statement.executeQuery(findByIdQuery)
         ) {
             if (rs.next()) {
                 return parseResultSet(rs);
@@ -91,7 +120,7 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
         }
-        return false;
+        return true;
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CRUDRepository<K, T> {
 
-    T findOne(K id);
+    T findById(K id);
 
     List<T> findAll();
 

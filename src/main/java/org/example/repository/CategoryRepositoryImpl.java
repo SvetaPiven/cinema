@@ -1,8 +1,10 @@
 package org.example.repository;
 
 import org.example.entity.Category;
+import org.example.entity.Film;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,7 +18,7 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
     public static final String NAME = "name";
 
     @Override
-    public Category findOne(Long id) {
+    public Category findById(Long id) {
         final String findOneQuery = "select * from category where id = " + id;
 
         registerDriver();
@@ -59,13 +61,11 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
 
     @Override
     public Category create(Category object) {
-        // TODO: Implement the creation logic
         return null;
     }
 
     @Override
     public Category update(Category object) {
-        // TODO: Implement the update logic
         return null;
     }
 
@@ -92,11 +92,39 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
             category = new Category();
             category.setId(rs.getLong(ID));
             category.setName(rs.getString(NAME));
-
+            List<Film> films = getFilmsForCategory(category.getId());
+                    category.setFilms(films);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return category;
+    }
+
+    private List<Film> getFilmsForCategory(Long categoryId) {
+        final String filmsQuery = "SELECT f.id, f.title, f.language_id FROM film f " +
+                "JOIN l_films_category fc ON fc.films_id = f.id " +
+                "JOIN category c ON c.id = fc.category_id " +
+                "WHERE c.id = ?";
+        List<Film> films = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(filmsQuery)
+        ) {
+            preparedStatement.setLong(1, categoryId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Film film = new Film();
+                    film.setId(rs.getLong("id"));
+                    film.setTitle(rs.getString("title"));
+                    film.setLanguageId(rs.getLong("language_id"));
+                    films.add(film);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+        return films;
     }
 }

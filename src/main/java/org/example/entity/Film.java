@@ -2,6 +2,8 @@ package org.example.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Film {
 
@@ -10,5 +12,7 @@ public class Film {
     private String title;
 
     private Long languageId;
+
+    private List<Category> categories;
 
 }

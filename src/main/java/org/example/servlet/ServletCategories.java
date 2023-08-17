@@ -1,5 +1,6 @@
 package org.example.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Category;
 import org.example.repository.CategoryRepository;
 import org.example.repository.CategoryRepositoryImpl;
@@ -11,60 +12,51 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet(value = "/categories", loadOnStartup = 1)
 public class ServletCategories extends HttpServlet {
 
     private CategoryRepository categoryRepository;
 
+    private ObjectMapper objectMapper;
+
     @Override
     public void init() {
         categoryRepository = new CategoryRepositoryImpl();
+        objectMapper = new ObjectMapper();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        response.setContentType("text/html");
+        response.setContentType("application/json;charset=UTF-8");
 
-        String categoryIdParameter = request.getParameter("id");
-        if (categoryIdParameter != null) {
+        String categoryId = request.getParameter("id");
+        if (categoryId != null) {
             try {
-                long id = Long.parseLong(categoryIdParameter);
-                Category category = categoryRepository.findOne(id);
+                long id = Long.parseLong(categoryId);
+                Category category = categoryRepository.findById(id);
 
-                if (category != null) {
-                    String htmlResponse = "<html><body>" +
-                            "<p>ID: " + category.getId() + "</p>" +
-                            "<p>Name: " + category.getName() + "</p>" +
-                            "</body></html>";
-
-                    response.getWriter().println(htmlResponse);
-                } else {
-                    response.getWriter().println("Category not found.");
-                }
+                String jsonResponse;
+                jsonResponse = objectMapper.writeValueAsString(Objects.requireNonNullElse(category, "Category not found."));
+                response.getWriter().println(jsonResponse);
             } catch (NumberFormatException e) {
-                response.getWriter().println("Invalid category ID.");
+                String jsonResponse = objectMapper.writeValueAsString("Invalid category ID.");
+                response.getWriter().println(jsonResponse);
             }
         } else {
             List<Category> categories = categoryRepository.findAll();
 
-            StringBuilder htmlResponse = new StringBuilder();
-            htmlResponse.append("<html><body>");
-            for (Category category : categories) {
-                htmlResponse.append("<p>ID: ").append(category.getId()).append("</p>");
-                htmlResponse.append("<p>Name: ").append(category.getName()).append("</p>");
-            }
-            htmlResponse.append("</body></html>");
-
-            response.getWriter().println(htmlResponse);
+            String jsonResponse = objectMapper.writeValueAsString(categories);
+            response.getWriter().println(jsonResponse);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        response.setContentType("text/html");
+        response.setContentType("application/json;charset=UTF-8");
 
         String categoryId = request.getParameter("id");
         if (categoryId != null) {
@@ -72,22 +64,21 @@ public class ServletCategories extends HttpServlet {
                 long id = Long.parseLong(categoryId);
                 boolean deleted = categoryRepository.delete(id);
 
+                String jsonResponse;
                 if (deleted) {
-                    response.getWriter().println("Category deleted successfully.");
+                    jsonResponse = objectMapper.writeValueAsString("Category deleted successfully.");
                 } else {
-                    response.getWriter().println("Category not found or could not be deleted.");
+                    jsonResponse = objectMapper.writeValueAsString("Category not found or could not be deleted.");
                 }
+                response.getWriter().println(jsonResponse);
             } catch (NumberFormatException e) {
-                response.getWriter().println("Invalid category ID.");
+                String jsonResponse = objectMapper.writeValueAsString("Invalid category ID.");
+                response.getWriter().println(jsonResponse);
             }
         } else {
-            response.getWriter().println("Please provide a valid category ID to delete.");
+            String jsonResponse = objectMapper.writeValueAsString("Please provide a valid category ID to delete.");
+            response.getWriter().println(jsonResponse);
         }
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // TODO document why this method is empty
-    }
 }
+
