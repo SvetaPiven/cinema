@@ -5,6 +5,7 @@ import org.example.repository.BaseRepository;
 import org.example.repository.FilmRepository;
 import org.example.repository.rowmapper.FilmRowMapper;
 import org.example.service.FilmService;
+import org.example.util.BaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,8 +30,8 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
 
         List<Film> result = new ArrayList<>();
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findAllQuery)
         ) {
@@ -46,7 +47,7 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
     }
 
     private Film parseResultSet(ResultSet rs) {
-        FilmRowMapper rowMapper = new FilmRowMapper(getConnection());
+        FilmRowMapper rowMapper = new FilmRowMapper(BaseConnection.getConnection());
         return rowMapper.processResultSetFilm(rs);
     }
 
@@ -54,8 +55,8 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
     public Film findById(Long id) {
         final String findByIdQuery = "select * from film where id = " + id;
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findByIdQuery)
         ) {
@@ -75,8 +76,8 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
         final String query = "DELETE FROM film WHERE id = ?";
         final String linkQuery = "DELETE FROM l_films_category WHERE films_id = ?";
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(linkQuery);
              PreparedStatement linkStatement = connection.prepareStatement(query)
         ) {
@@ -98,8 +99,8 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
     public Film update(Film film) {
         final String updateQuery = "update film set title = ?, language_id = ? where id = ?";
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)
         ) {
             preparedStatement.setString(1, film.getTitle());
@@ -118,8 +119,8 @@ public class FilmRepositoryImpl extends BaseRepository implements FilmRepository
     public Film create(Film film) {
         final String insertQuery = "insert into film (title, language_id) values (?, ?)";
 
-          registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)
         ) {
             preparedStatement.setString(1, film.getTitle());

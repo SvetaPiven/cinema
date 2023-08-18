@@ -4,6 +4,7 @@ import org.example.entity.Category;
 import org.example.repository.BaseRepository;
 import org.example.repository.CategoryRepository;
 import org.example.repository.rowmapper.CategoryRowMapper;
+import org.example.util.BaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,18 +14,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryRepositoryImpl extends BaseRepository implements CategoryRepository {
+public class CategoryRepositoryImpl implements CategoryRepository {
 
     public static final String ID = "id";
 
     public static final String NAME = "name";
 
+
     @Override
     public Category findById(Long id) {
         final String findOneQuery = "select * from category where id = " + id;
 
-        registerDriver();
-        try (Connection connection = getConnection();
+            BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findOneQuery)
         ) {
@@ -45,8 +47,8 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
 
         List<Category> result = new ArrayList<>();
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findAllQuery)
         ) {
@@ -76,8 +78,8 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
         final String query = "DELETE FROM category WHERE id = ?";
         final String linkQuery = "DELETE FROM l_films_category WHERE category_id = ?";
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              PreparedStatement linkStatement = connection.prepareStatement(linkQuery)
         ) {
@@ -96,7 +98,7 @@ public class CategoryRepositoryImpl extends BaseRepository implements CategoryRe
     }
 
     private Category parseResultSet(ResultSet rs) {
-        CategoryRowMapper rowMapper = new CategoryRowMapper(getConnection());
+        CategoryRowMapper rowMapper = new CategoryRowMapper(BaseConnection.getConnection());
         return rowMapper.processResultSetCategory(rs);
     }
 }

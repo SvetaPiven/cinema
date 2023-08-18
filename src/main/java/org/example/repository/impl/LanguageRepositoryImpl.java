@@ -5,6 +5,7 @@ import org.example.repository.BaseRepository;
 import org.example.repository.LanguageRepository;
 import org.example.repository.rowmapper.FilmRowMapper;
 import org.example.repository.rowmapper.LanguageRowMapper;
+import org.example.util.BaseConnection;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,8 +32,8 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
 
         List<Language> result = new ArrayList<>();
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findAllQuery)
         ) {
@@ -48,7 +49,7 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     }
 
     private Language parseResultSet(ResultSet rs) {
-        LanguageRowMapper rowMapper = new LanguageRowMapper( new FilmRowMapper(getConnection()), getConnection());
+        LanguageRowMapper rowMapper = new LanguageRowMapper( new FilmRowMapper(BaseConnection.getConnection()), BaseConnection.getConnection());
         return rowMapper.processResultSetLanguage(rs);
     }
 
@@ -56,8 +57,8 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     public Language findById(Long id) {
         final String findOneQuery = "SELECT * FROM language WHERE id = " + id;
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findOneQuery)
         ) {
@@ -76,8 +77,8 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     public boolean delete(Long id) {
         final String deleteQuery = "DELETE FROM language WHERE id = " + id;
 
-        registerDriver();
-        try (Connection connection = getConnection();
+        BaseConnection.registerDriver();
+        try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(deleteQuery);
