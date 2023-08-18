@@ -7,10 +7,8 @@ import org.example.repository.impl.FilmRepositoryImpl;
 import org.example.repository.impl.LanguageRepositoryImpl;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LanguageRowMapper {

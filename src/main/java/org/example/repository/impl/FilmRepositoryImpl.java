@@ -2,7 +2,6 @@ package org.example.repository.impl;
 
 import org.example.entity.Category;
 import org.example.entity.Film;
-import org.example.repository.BaseRepository;
 import org.example.repository.FilmRepository;
 import org.example.repository.rowmapper.FilmRowMapper;
 import org.example.util.BaseConnection;

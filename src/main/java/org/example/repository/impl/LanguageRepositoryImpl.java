@@ -4,7 +4,6 @@ import org.example.entity.Film;
 import org.example.entity.Language;
 import org.example.repository.BaseRepository;
 import org.example.repository.LanguageRepository;
-import org.example.repository.rowmapper.FilmRowMapper;
 import org.example.repository.rowmapper.LanguageRowMapper;
 import org.example.util.BaseConnection;
 
@@ -21,11 +20,7 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     public static final String ID = "id";
     public static final String NAME = "name";
 
-    private final FilmRepositoryImpl filmRepositoryImpl;
-
-    public LanguageRepositoryImpl() {
-        filmRepositoryImpl = new FilmRepositoryImpl();
-    }
+    private final FilmRepositoryImpl filmRepositoryImpl = new FilmRepositoryImpl();
 
     @Override
     public List<Language> findAll() {
@@ -50,7 +45,7 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     }
 
     private Language parseResultSet(ResultSet rs) {
-        LanguageRowMapper rowMapper = new LanguageRowMapper(new FilmRowMapper(BaseConnection.getConnection(), filmRepositoryImpl), BaseConnection.getConnection(), this);
+        LanguageRowMapper rowMapper = new LanguageRowMapper(filmRepositoryImpl, BaseConnection.getConnection(), this);
         return rowMapper.processResultSetLanguage(rs);
     }
 

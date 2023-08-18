@@ -38,30 +38,4 @@ public class FilmRowMapper {
 
         return film;
     }
-
-//    public List<Category> getCategoriesForFilm(Long filmId, Connection connection) {
-//        final String categoryQuery = "SELECT c.id, c.name FROM category c " +
-//                "JOIN l_films_category fc ON fc.category_id = c.id " +
-//                "JOIN film f ON f.id = fc.films_id " +
-//                "WHERE f.id = ?";
-//        List<Category> categories = new ArrayList<>();
-//
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(categoryQuery)
-//        ) {
-//            preparedStatement.setLong(1, filmId);
-//            try (ResultSet rs = preparedStatement.executeQuery()) {
-//                while (rs.next()) {
-//                    Category category = new Category();
-//                    category.setId(rs.getLong("id"));
-//                    category.setName(rs.getString("name"));
-//                    categories.add(category);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//            throw new RuntimeException("SQL Issues!");
-//        }
-//        return categories;
-//    }
-
 }
