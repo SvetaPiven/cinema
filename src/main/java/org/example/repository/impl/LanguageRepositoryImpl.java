@@ -49,7 +49,7 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     }
 
     private Language parseResultSet(ResultSet rs) {
-        LanguageRowMapper rowMapper = new LanguageRowMapper( new FilmRowMapper(BaseConnection.getConnection()), BaseConnection.getConnection());
+        LanguageRowMapper rowMapper = new LanguageRowMapper(new FilmRowMapper(BaseConnection.getConnection()), BaseConnection.getConnection());
         return rowMapper.processResultSetLanguage(rs);
     }
 

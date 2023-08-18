@@ -16,10 +16,10 @@ public class BaseRepository {
 
     public BaseRepository() {
         Properties properties = loadProperties();
-        this.jdbcURL = properties.getProperty("database.url");
-        this.username = properties.getProperty("database.login");
-        this.password = properties.getProperty("database.password");
-        this.jdbcDriver = properties.getProperty("driver.name");
+        jdbcURL = properties.getProperty("database.url");
+        username = properties.getProperty("database.login");
+        password = properties.getProperty("database.password");
+        jdbcDriver = properties.getProperty("driver.name");
     }
 
     private Properties loadProperties() {

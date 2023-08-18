@@ -8,11 +8,7 @@ import java.sql.SQLException;
 
 public class BaseConnection {
 
-    private final BaseRepository baseRepository;
-
-    public BaseConnection(BaseRepository baseRepository) {
-        this.baseRepository = baseRepository;
-    }
+    private BaseConnection(){}
 
     public static void registerDriver() {
         try {

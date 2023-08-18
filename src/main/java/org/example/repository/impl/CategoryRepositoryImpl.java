@@ -1,7 +1,6 @@
 package org.example.repository.impl;
 
 import org.example.entity.Category;
-import org.example.repository.BaseRepository;
 import org.example.repository.CategoryRepository;
 import org.example.repository.rowmapper.CategoryRowMapper;
 import org.example.util.BaseConnection;
@@ -25,7 +24,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public Category findById(Long id) {
         final String findOneQuery = "select * from category where id = " + id;
 
-            BaseConnection.registerDriver();
+        BaseConnection.registerDriver();
         try (Connection connection = BaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findOneQuery)

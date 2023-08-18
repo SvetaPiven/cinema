@@ -4,7 +4,6 @@ import org.example.entity.Film;
 import org.example.repository.BaseRepository;
 import org.example.repository.FilmRepository;
 import org.example.repository.rowmapper.FilmRowMapper;
-import org.example.service.FilmService;
 import org.example.util.BaseConnection;
 
 import java.sql.Connection;
