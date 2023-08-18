@@ -1,6 +1,7 @@
 package org.example.repository.impl;
 
 import org.example.entity.Category;
+import org.example.entity.Film;
 import org.example.repository.CategoryRepository;
 import org.example.repository.rowmapper.CategoryRowMapper;
 import org.example.util.BaseConnection;
@@ -97,7 +98,33 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     private Category parseResultSet(ResultSet rs) {
-        CategoryRowMapper rowMapper = new CategoryRowMapper(BaseConnection.getConnection());
+        CategoryRowMapper rowMapper = new CategoryRowMapper(BaseConnection.getConnection(), this);
         return rowMapper.processResultSetCategory(rs);
+    }
+
+    public List<Film> getFilmsForCategory(Long categoryId, Connection connection) {
+        final String filmsQuery = "SELECT f.id, f.title, f.language_id FROM film f " +
+                "JOIN l_films_category fc ON fc.films_id = f.id " +
+                "JOIN category c ON c.id = fc.category_id " +
+                "WHERE c.id = ?";
+        List<Film> films = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(filmsQuery)
+        ) {
+            preparedStatement.setLong(1, categoryId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Film film = new Film();
+                    film.setId(rs.getLong("id"));
+                    film.setTitle(rs.getString("title"));
+                    film.setLanguageId(rs.getLong("language_id"));
+                    films.add(film);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+        return films;
     }
 }

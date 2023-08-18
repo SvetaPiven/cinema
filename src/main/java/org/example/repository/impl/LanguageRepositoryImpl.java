@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.entity.Film;
 import org.example.entity.Language;
 import org.example.repository.BaseRepository;
 import org.example.repository.LanguageRepository;
@@ -8,6 +9,7 @@ import org.example.repository.rowmapper.LanguageRowMapper;
 import org.example.util.BaseConnection;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,10 +19,9 @@ import java.util.List;
 public class LanguageRepositoryImpl extends BaseRepository implements LanguageRepository {
 
     public static final String ID = "id";
-
     public static final String NAME = "name";
 
-    private FilmRepositoryImpl filmRepositoryImpl;
+    private final FilmRepositoryImpl filmRepositoryImpl;
 
     public LanguageRepositoryImpl() {
         filmRepositoryImpl = new FilmRepositoryImpl();
@@ -49,7 +50,7 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     }
 
     private Language parseResultSet(ResultSet rs) {
-        LanguageRowMapper rowMapper = new LanguageRowMapper(new FilmRowMapper(BaseConnection.getConnection()), BaseConnection.getConnection());
+        LanguageRowMapper rowMapper = new LanguageRowMapper(new FilmRowMapper(BaseConnection.getConnection(), filmRepositoryImpl), BaseConnection.getConnection(), this);
         return rowMapper.processResultSetLanguage(rs);
     }
 
@@ -97,5 +98,27 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     @Override
     public Language create(Language language) {
         return null;
+    }
+
+    public List<Film> getFilmsForLanguage(Long languageId, Connection connection) {
+        final String languageQuery = "SELECT f.id, f.title FROM language l " +
+                "JOIN film f ON f.language_id = l.id " +
+                "WHERE l.id = ?";
+        List<Film> films = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(languageQuery)) {
+            preparedStatement.setLong(1, languageId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Film film = new Film();
+                    film.setId(rs.getLong("id"));
+                    film.setTitle(rs.getString("title"));
+                    films.add(film);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("SQL Issues!", e);
+        }
+        return films;
     }
 }
