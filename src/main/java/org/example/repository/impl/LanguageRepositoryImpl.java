@@ -2,7 +2,6 @@ package org.example.repository.impl;
 
 import org.example.entity.Film;
 import org.example.entity.Language;
-import org.example.repository.BaseRepository;
 import org.example.repository.LanguageRepository;
 import org.example.repository.rowmapper.LanguageRowMapper;
 import org.example.util.BaseConnection;
@@ -15,12 +14,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LanguageRepositoryImpl extends BaseRepository implements LanguageRepository {
+public class LanguageRepositoryImpl implements LanguageRepository {
 
     public static final String ID = "id";
+
     public static final String NAME = "name";
 
-    private final FilmRepositoryImpl filmRepositoryImpl = new FilmRepositoryImpl();
+    private final BaseConnection baseConnection;
+
+    private final FilmRepositoryImpl filmRepositoryImpl = new FilmRepositoryImpl(null);
+
+    public LanguageRepositoryImpl(BaseConnection baseConnection) {
+        this.baseConnection = baseConnection;
+    }
 
     @Override
     public List<Language> findAll() {
@@ -28,8 +34,8 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
 
         List<Language> result = new ArrayList<>();
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findAllQuery)
         ) {
@@ -45,7 +51,7 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     }
 
     private Language parseResultSet(ResultSet rs) {
-        LanguageRowMapper rowMapper = new LanguageRowMapper(filmRepositoryImpl, BaseConnection.getConnection(), this);
+        LanguageRowMapper rowMapper = new LanguageRowMapper(filmRepositoryImpl, baseConnection.getConnection(), this);
         return rowMapper.processResultSetLanguage(rs);
     }
 
@@ -53,8 +59,8 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     public Language findById(Long id) {
         final String findOneQuery = "SELECT * FROM language WHERE id = " + id;
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findOneQuery)
         ) {
@@ -73,8 +79,8 @@ public class LanguageRepositoryImpl extends BaseRepository implements LanguageRe
     public boolean delete(Long id) {
         final String deleteQuery = "DELETE FROM language WHERE id = " + id;
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(deleteQuery);

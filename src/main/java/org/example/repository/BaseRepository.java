@@ -5,49 +5,54 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class BaseRepository {
+    private String jdbcDriver;
+    private String jdbcURL;
+    private String username;
+    private String password;
+    private String dbName;
 
-    public static String jdbcDriver;
+    public BaseRepository(String propertiesFileName) {
+        loadProperties(propertiesFileName);
+    }
 
-    private static String jdbcURL;
-
-    private static String username;
-
-    private static String password;
-
-    public BaseRepository() {
-        Properties properties = loadProperties();
+    private void loadProperties(String propertiesFileName) {
+        Properties properties = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesFileName)) {
+            if (input == null) {
+                throw new RuntimeException("Properties file not found: " + propertiesFileName);
+            }
+            properties.load(input);
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading properties file: " + propertiesFileName, e);
+        }
         jdbcURL = properties.getProperty("database.url");
         username = properties.getProperty("database.login");
         password = properties.getProperty("database.password");
         jdbcDriver = properties.getProperty("driver.name");
+        dbName = properties.getProperty("database.name");
     }
 
-    private Properties loadProperties() {
-        Properties properties = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-            if (input == null) {
-                throw new RuntimeException("Properties file not found: application.properties");
-            }
-            properties.load(input);
-        } catch (IOException e) {
-            throw new RuntimeException("Error loading properties file: application.properties", e);
-        }
-        return properties;
-    }
-
-    public String getDriver() {
+    public String getJdbcDriver() {
         return jdbcDriver;
     }
 
-    public static String getDatabaseUrl() {
+    public String getDatabaseUrl() {
         return jdbcURL;
     }
 
-    public static String getDatabaseUser() {
+    public String getDatabaseUser() {
         return username;
     }
 
-    public static String getDatabasePassword() {
+    public String getDatabasePassword() {
         return password;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDatabaseUrl(String jdbcURL) {
+        this.jdbcURL = jdbcURL;
     }
 }

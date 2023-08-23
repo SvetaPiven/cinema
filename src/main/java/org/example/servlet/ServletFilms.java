@@ -2,6 +2,7 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Film;
+import org.example.repository.BaseRepository;
 import org.example.repository.CategoryRepository;
 import org.example.repository.FilmRepository;
 import org.example.repository.impl.CategoryRepositoryImpl;
@@ -10,6 +11,7 @@ import org.example.service.CategoryService;
 import org.example.service.FilmService;
 import org.example.service.impl.CategoryServiceImpl;
 import org.example.service.impl.FilmServiceImpl;
+import org.example.util.BaseConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(value = "/films")
+@WebServlet(value = "/films", loadOnStartup = 1)
 public class ServletFilms extends HttpServlet {
 
     private CategoryService categoryService;
@@ -30,10 +32,12 @@ public class ServletFilms extends HttpServlet {
 
     @Override
     public void init() {
-        CategoryRepository categoryRepository = new CategoryRepositoryImpl();
+        BaseConnection baseConnection = new BaseConnection(new BaseRepository("application.properties"));
+
+        CategoryRepository categoryRepository = new CategoryRepositoryImpl(baseConnection);
         categoryService = new CategoryServiceImpl(categoryRepository);
 
-        FilmRepository filmRepository = new FilmRepositoryImpl();
+        FilmRepository filmRepository = new FilmRepositoryImpl(baseConnection);
         filmService = new FilmServiceImpl(filmRepository);
 
         objectMapper = new ObjectMapper();

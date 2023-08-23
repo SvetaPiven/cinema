@@ -2,10 +2,12 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Category;
+import org.example.repository.BaseRepository;
 import org.example.repository.CategoryRepository;
 import org.example.repository.impl.CategoryRepositoryImpl;
 import org.example.service.CategoryService;
 import org.example.service.impl.CategoryServiceImpl;
+import org.example.util.BaseConnection;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@WebServlet(value = "/categories")
+@WebServlet(value = "/categories", loadOnStartup = 1)
 public class ServletCategories extends HttpServlet {
 
     private CategoryService categoryService;
@@ -24,7 +26,8 @@ public class ServletCategories extends HttpServlet {
 
     @Override
     public void init() {
-        CategoryRepository categoryRepository = new CategoryRepositoryImpl();
+        BaseConnection baseConnection = new BaseConnection(new BaseRepository("application.properties"));
+        CategoryRepository categoryRepository = new CategoryRepositoryImpl(baseConnection);
         categoryService = new CategoryServiceImpl(categoryRepository);
         objectMapper = new ObjectMapper();
     }

@@ -8,22 +8,27 @@ import java.sql.SQLException;
 
 public class BaseConnection {
 
-    private BaseConnection(){}
+    private BaseRepository baseRepository;
 
-    public static void registerDriver() {
+    public BaseConnection(BaseRepository baseRepository) {
+        this.baseRepository = baseRepository;
+    }
+
+
+    public void registerDriver() {
         try {
-            Class.forName(BaseRepository.jdbcDriver);
+            Class.forName(baseRepository.getJdbcDriver());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() {
-        String jdbcURL = BaseRepository.getDatabaseUrl();
+    public Connection getConnection() {
+        String jdbcURL = baseRepository.getDatabaseUrl();
         try {
             return DriverManager.getConnection(jdbcURL,
-                    BaseRepository.getDatabaseUser(),
-                    BaseRepository.getDatabasePassword());
+                    baseRepository.getDatabaseUser(),
+                    baseRepository.getDatabasePassword());
 
         } catch (SQLException e) {
             throw new RuntimeException();

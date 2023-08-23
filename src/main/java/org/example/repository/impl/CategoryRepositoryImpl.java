@@ -20,13 +20,18 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     public static final String NAME = "name";
 
+    private final BaseConnection baseConnection;
+
+    public CategoryRepositoryImpl(BaseConnection baseConnection) {
+        this.baseConnection = baseConnection;
+    }
 
     @Override
     public Category findById(Long id) {
         final String findOneQuery = "select * from category where id = " + id;
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findOneQuery)
         ) {
@@ -47,8 +52,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
         List<Category> result = new ArrayList<>();
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findAllQuery)
         ) {
@@ -78,8 +83,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         final String query = "DELETE FROM category WHERE id = ?";
         final String linkQuery = "DELETE FROM l_films_category WHERE category_id = ?";
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              PreparedStatement linkStatement = connection.prepareStatement(linkQuery)
         ) {
@@ -98,7 +103,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     private Category parseResultSet(ResultSet rs) {
-        CategoryRowMapper rowMapper = new CategoryRowMapper(BaseConnection.getConnection(), this);
+        CategoryRowMapper rowMapper = new CategoryRowMapper(baseConnection.getConnection(), this);
         return rowMapper.processResultSetCategory(rs);
     }
 

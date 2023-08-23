@@ -1,4 +1,4 @@
-create table if not exist public.language
+create table public.language
 (
     id   bigserial
         primary key,
@@ -8,7 +8,7 @@ create table if not exist public.language
 alter table public.language
     owner to development;
 
-create table if not exist public.film
+create table public.film
 (
     id          bigserial
         primary key,
@@ -18,7 +18,7 @@ create table if not exist public.film
             references public.language
 );
 
-alter table if not exist public.film
+alter table public.film
     owner to development;
 create table public.category
 (
@@ -27,7 +27,7 @@ create table public.category
     name varchar not null
 );
 
-alter table if not exist public.category
+alter table public.category
     owner to development;
 
 create table public.l_films_category
@@ -42,5 +42,5 @@ create table public.l_films_category
         primary key (films_id, category_id)
 );
 
-alter table if not exist public.l_films_category
+alter table public.l_films_category
     owner to development;

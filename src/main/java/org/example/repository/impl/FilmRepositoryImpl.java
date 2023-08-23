@@ -23,14 +23,20 @@ public class FilmRepositoryImpl implements FilmRepository {
 
     public static final String LANGUAGE_ID = "language_id";
 
+    private final BaseConnection baseConnection;
+
+    public FilmRepositoryImpl(BaseConnection baseConnection) {
+        this.baseConnection = baseConnection;
+    }
+
     @Override
     public List<Film> findAll() {
         final String findAllQuery = "select * from film order by id ";
 
         List<Film> result = new ArrayList<>();
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findAllQuery)
         ) {
@@ -46,7 +52,7 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     private Film parseResultSet(ResultSet rs) {
-        FilmRowMapper rowMapper = new FilmRowMapper(BaseConnection.getConnection(), this);
+        FilmRowMapper rowMapper = new FilmRowMapper(baseConnection.getConnection(), this);
         return rowMapper.processResultSetFilm(rs);
     }
 
@@ -54,8 +60,8 @@ public class FilmRepositoryImpl implements FilmRepository {
     public Film findById(Long id) {
         final String findByIdQuery = "select * from film where id = " + id;
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(findByIdQuery)
         ) {
@@ -75,8 +81,8 @@ public class FilmRepositoryImpl implements FilmRepository {
         final String query = "DELETE FROM film WHERE id = ?";
         final String linkQuery = "DELETE FROM l_films_category WHERE films_id = ?";
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(linkQuery);
              PreparedStatement linkStatement = connection.prepareStatement(query)
         ) {
@@ -98,8 +104,8 @@ public class FilmRepositoryImpl implements FilmRepository {
     public Film update(Film film) {
         final String updateQuery = "update film set title = ?, language_id = ? where id = ?";
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)
         ) {
             preparedStatement.setString(1, film.getTitle());
@@ -118,8 +124,8 @@ public class FilmRepositoryImpl implements FilmRepository {
     public Film create(Film film) {
         final String insertQuery = "insert into film (title, language_id) values (?, ?)";
 
-        BaseConnection.registerDriver();
-        try (Connection connection = BaseConnection.getConnection();
+        baseConnection.registerDriver();
+        try (Connection connection = baseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)
         ) {
             preparedStatement.setString(1, film.getTitle());
