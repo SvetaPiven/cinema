@@ -64,7 +64,7 @@ class CategoryServiceTest {
 
     @Test
     void testDelete() {
-        Long categoryIdToDelete = 1L;
+        Long categoryIdToDelete = 17L;
 
         when(categoryRepository.delete(categoryIdToDelete)).thenReturn(true);
 

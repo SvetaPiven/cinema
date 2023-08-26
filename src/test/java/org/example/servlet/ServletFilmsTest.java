@@ -40,6 +40,7 @@ class ServletFilmsTest {
     @BeforeEach
     void setUp() {
         servlet.init();
+        servlet.setFilmService(filmService);
         StringWriter stringWriter = new StringWriter();
         writer = new PrintWriter(stringWriter);
     }

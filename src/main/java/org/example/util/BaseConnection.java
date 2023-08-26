@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class BaseConnection {
 
-    private BaseRepository baseRepository;
+    private final BaseRepository baseRepository;
 
     public BaseConnection(BaseRepository baseRepository) {
         this.baseRepository = baseRepository;

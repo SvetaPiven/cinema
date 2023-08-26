@@ -1,7 +1,7 @@
 package org.example.servlet;
 
 import org.example.entity.Category;
-import org.example.service.impl.CategoryServiceImpl;
+import org.example.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +23,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ServletCategoriesTest {
 
+    @InjectMocks
+    private ServletCategories servlet;
+
     @Mock
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
 
     @Mock
     private HttpServletRequest request;
@@ -32,22 +35,21 @@ class ServletCategoriesTest {
     @Mock
     private HttpServletResponse response;
 
-    @InjectMocks
-    private ServletCategories servlet;
-
     private PrintWriter writer;
+
 
     @BeforeEach
     void setUp() {
         servlet.init();
+        servlet.setCategoryService(categoryService);
         StringWriter stringWriter = new StringWriter();
         writer = new PrintWriter(stringWriter);
     }
 
     @Test
     void testDeleteValidCategoryId() throws Exception {
-        Long categoryIdToDelete = 1L;
-        when(request.getParameter("id")).thenReturn("1");
+        Long categoryIdToDelete = 21L;
+        when(request.getParameter("id")).thenReturn("21");
         when(response.getWriter()).thenReturn(writer);
         when(categoryService.delete(categoryIdToDelete)).thenReturn(true);
 

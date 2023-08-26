@@ -40,6 +40,7 @@ class ServletLanguagesTest {
     @BeforeEach
     void setUp() {
         servlet.init();
+        servlet.setLanguageService(languageService);
         StringWriter stringWriter = new StringWriter();
         writer = new PrintWriter(stringWriter);
     }
@@ -47,7 +48,7 @@ class ServletLanguagesTest {
     @Test
     void testDeleteValidLanguageId() throws Exception {
         Long languageIdToDelete = 1L;
-        when(request.getParameter("id")).thenReturn("2");
+        when(request.getParameter("id")).thenReturn("1");
         when(response.getWriter()).thenReturn(writer);
         when(languageService.delete(languageIdToDelete)).thenReturn(true);
 

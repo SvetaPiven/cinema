@@ -2,16 +2,16 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Film;
-import org.example.service.CategoryService;
-import org.example.service.FilmService;
-import org.example.service.impl.CategoryServiceImpl;
-import org.example.service.impl.FilmServiceImpl;
-import org.example.util.BaseConnection;
 import org.example.repository.BaseRepository;
 import org.example.repository.CategoryRepository;
 import org.example.repository.FilmRepository;
 import org.example.repository.impl.CategoryRepositoryImpl;
 import org.example.repository.impl.FilmRepositoryImpl;
+import org.example.service.CategoryService;
+import org.example.service.FilmService;
+import org.example.service.impl.CategoryServiceImpl;
+import org.example.service.impl.FilmServiceImpl;
+import org.example.util.BaseConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,6 +29,10 @@ public class ServletFilms extends HttpServlet {
     private FilmService filmService;
 
     private ObjectMapper objectMapper;
+
+    public void setFilmService(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @Override
     public void init() {

@@ -61,7 +61,7 @@ class CategoryRepositoryTests {
 
     @Test
     void testDelete() {
-        Long categoryIdToDelete = 2L;
+        Long categoryIdToDelete = 17L;
         boolean result = categoryRepository.delete(categoryIdToDelete);
 
         assertTrue(result);
