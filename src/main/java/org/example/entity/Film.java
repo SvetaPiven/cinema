@@ -27,6 +27,13 @@ public class Film {
         this.title = title;
     }
 
+    public Film(Long id, String title, Long languageId, List<Category> categories) {
+        this.id = id;
+        this.title = title;
+        this.languageId = languageId;
+        this.categories = categories;
+    }
+
     public Long getId() {
         return id;
     }
@@ -56,13 +63,6 @@ public class Film {
     }
 
     public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    public Film(Long id, String title, Long languageId, List<Category> categories) {
-        this.id = id;
-        this.title = title;
-        this.languageId = languageId;
         this.categories = categories;
     }
 

@@ -1,6 +1,6 @@
 package org.example.util;
 
-import repository.BaseRepository;
+import org.example.repository.BaseRepository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

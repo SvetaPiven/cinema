@@ -1,4 +1,4 @@
-package repository;
+package org.example.repository;
 
 import org.example.entity.Language;
 

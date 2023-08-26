@@ -1,8 +1,8 @@
 package org.example.service.impl;
 
 import org.example.entity.Language;
-import repository.LanguageRepository;
 import org.example.service.LanguageService;
+import org.example.repository.LanguageRepository;
 
 import java.util.List;
 

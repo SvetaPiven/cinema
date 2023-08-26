@@ -5,9 +5,9 @@ import org.example.entity.Category;
 import org.example.service.CategoryService;
 import org.example.service.impl.CategoryServiceImpl;
 import org.example.util.BaseConnection;
-import repository.BaseRepository;
-import repository.CategoryRepository;
-import repository.impl.CategoryRepositoryImpl;
+import org.example.repository.BaseRepository;
+import org.example.repository.CategoryRepository;
+import org.example.repository.impl.CategoryRepositoryImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

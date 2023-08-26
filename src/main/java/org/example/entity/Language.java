@@ -1,9 +1,5 @@
 package org.example.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +18,11 @@ public class Language {
         this.id = id;
         this.name = name;
         this.films = films;
+    }
+
+    public Language(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Long getId() {

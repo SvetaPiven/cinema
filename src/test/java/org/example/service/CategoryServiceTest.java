@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.entity.Category;
 import org.example.entity.Film;
-import repository.CategoryRepository;
+import org.example.repository.CategoryRepository;
 import org.example.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,8 +45,6 @@ class CategoryServiceTest {
         assertEquals(categoryId, category.getId());
         assertEquals("New Category", category.getName());
 
-        assertEquals(category.getId(), categoryId);
-        assertEquals("New Category", category.getName());
     }
 
     @Test

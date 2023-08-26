@@ -38,12 +38,12 @@ public class Category {
         return name;
     }
 
-    public List<Film> getFilms() {
-        return films;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Film> getFilms() {
+        return films;
     }
 
     public void setFilms(List<Film> films) {

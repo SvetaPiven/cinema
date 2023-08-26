@@ -2,12 +2,12 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Language;
-import repository.BaseRepository;
-import repository.LanguageRepository;
-import repository.impl.LanguageRepositoryImpl;
 import org.example.service.LanguageService;
 import org.example.service.impl.LanguageServiceImpl;
 import org.example.util.BaseConnection;
+import org.example.repository.BaseRepository;
+import org.example.repository.LanguageRepository;
+import org.example.repository.impl.LanguageRepositoryImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

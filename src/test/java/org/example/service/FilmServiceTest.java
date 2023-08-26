@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.entity.Category;
 import org.example.entity.Film;
-import repository.FilmRepository;
+import org.example.repository.FilmRepository;
 import org.example.service.impl.FilmServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +63,7 @@ class FilmServiceTest {
 
         assertEquals(testFilms.size(), films.size());
     }
+
     @Test
     void testUpdate() {
         Long id = 3L;

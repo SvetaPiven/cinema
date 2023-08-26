@@ -1,9 +1,9 @@
-package repository.impl;
+package org.example.repository.impl;
 
 import org.example.entity.Film;
 import org.example.entity.Language;
-import repository.LanguageRepository;
-import repository.rowmapper.LanguageRowMapper;
+import org.example.repository.LanguageRepository;
+import org.example.repository.rowmapper.LanguageRowMapper;
 import org.example.util.BaseConnection;
 
 import java.sql.Connection;
@@ -77,18 +77,30 @@ public class LanguageRepositoryImpl implements LanguageRepository {
 
     @Override
     public boolean delete(Long id) {
-        final String deleteQuery = "DELETE FROM language WHERE id = " + id;
+        final String deleteFilmQuery = "DELETE FROM film WHERE language_id = ?";
+        final String deleteFilmCategoryLinksQuery = "DELETE FROM l_films_category WHERE films_id = ?";
+        final String deleteLanguageQuery = "DELETE FROM language WHERE id = ?";
 
         baseConnection.registerDriver();
         try (Connection connection = baseConnection.getConnection();
-             Statement statement = connection.createStatement()
+             PreparedStatement deleteFilmStatement = connection.prepareStatement(deleteFilmQuery);
+             PreparedStatement deleteFilmCategoryLinksStatement = connection.prepareStatement(deleteFilmCategoryLinksQuery);
+             PreparedStatement deleteLanguageStatement = connection.prepareStatement(deleteLanguageQuery)
         ) {
-            statement.executeUpdate(deleteQuery);
+            deleteFilmStatement.setLong(1, id);
+            deleteFilmStatement.executeUpdate();
+
+            deleteFilmCategoryLinksStatement.setLong(1, id);
+            deleteFilmCategoryLinksStatement.executeUpdate();
+
+            deleteLanguageStatement.setLong(1, id);
+            deleteLanguageStatement.executeUpdate();
+
+            return true;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
         }
-        return true;
     }
 
     @Override

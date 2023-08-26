@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.entity.Film;
 import org.example.entity.Language;
-import repository.LanguageRepository;
+import org.example.repository.LanguageRepository;
 import org.example.service.impl.LanguageServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
