@@ -1,9 +1,9 @@
-package org.example;
+package org.example.repositorytest;
 
 import org.example.entity.Film;
-import org.example.repository.BaseRepository;
-import org.example.repository.FilmRepository;
-import org.example.repository.impl.FilmRepositoryImpl;
+import repository.BaseRepository;
+import repository.FilmRepository;
+import repository.impl.FilmRepositoryImpl;
 import org.example.util.BaseConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

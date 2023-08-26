@@ -2,11 +2,11 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Film;
-import org.example.repository.BaseRepository;
-import org.example.repository.CategoryRepository;
-import org.example.repository.FilmRepository;
-import org.example.repository.impl.CategoryRepositoryImpl;
-import org.example.repository.impl.FilmRepositoryImpl;
+import repository.BaseRepository;
+import repository.CategoryRepository;
+import repository.FilmRepository;
+import repository.impl.CategoryRepositoryImpl;
+import repository.impl.FilmRepositoryImpl;
 import org.example.service.CategoryService;
 import org.example.service.FilmService;
 import org.example.service.impl.CategoryServiceImpl;

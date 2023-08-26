@@ -1,7 +1,7 @@
 package org.example.service.impl;
 
 import org.example.entity.Film;
-import org.example.repository.FilmRepository;
+import repository.FilmRepository;
 import org.example.service.FilmService;
 
 import java.util.List;

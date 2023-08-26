@@ -2,9 +2,9 @@ package org.example.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entity.Language;
-import org.example.repository.BaseRepository;
-import org.example.repository.LanguageRepository;
-import org.example.repository.impl.LanguageRepositoryImpl;
+import repository.BaseRepository;
+import repository.LanguageRepository;
+import repository.impl.LanguageRepositoryImpl;
 import org.example.service.LanguageService;
 import org.example.service.impl.LanguageServiceImpl;
 import org.example.util.BaseConnection;
@@ -58,6 +58,29 @@ public class ServletLanguages extends HttpServlet {
 
             String json = objectMapper.writeValueAsString(languages);
             response.getWriter().println(json);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+
+        String languageId = request.getParameter("id");
+        if (languageId != null) {
+            try {
+                long id = Long.parseLong(languageId);
+                boolean deleted = languageService.delete(id);
+
+                if (deleted) {
+                    objectMapper.writeValue(response.getWriter(), "Language deleted successfully.");
+                } else {
+                    objectMapper.writeValue(response.getWriter(), "Language not found or could not be deleted.");
+                }
+            } catch (NumberFormatException e) {
+                objectMapper.writeValue(response.getWriter(), "Invalid language ID.");
+            }
+        } else {
+            objectMapper.writeValue(response.getWriter(), "Please provide a valid language ID to delete.");
         }
     }
 }

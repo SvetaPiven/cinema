@@ -1,4 +1,4 @@
-package org.example.repository;
+package repository;
 
 import java.io.IOException;
 import java.io.InputStream;

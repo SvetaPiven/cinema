@@ -1,8 +1,8 @@
-package org.example.repository.rowmapper;
+package repository.rowmapper;
 
 import org.example.entity.Category;
 import org.example.entity.Film;
-import org.example.repository.impl.FilmRepositoryImpl;
+import repository.impl.FilmRepositoryImpl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

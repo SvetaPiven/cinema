@@ -1,9 +1,9 @@
-package org.example;
+package org.example.repositorytest;
 
 import org.example.entity.Category;
-import org.example.repository.BaseRepository;
-import org.example.repository.CategoryRepository;
-import org.example.repository.impl.CategoryRepositoryImpl;
+import repository.BaseRepository;
+import repository.CategoryRepository;
+import repository.impl.CategoryRepositoryImpl;
 import org.example.util.BaseConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

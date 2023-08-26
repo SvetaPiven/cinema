@@ -1,4 +1,4 @@
-package org.example.repository;
+package repository;
 
 import org.example.entity.Category;
 
