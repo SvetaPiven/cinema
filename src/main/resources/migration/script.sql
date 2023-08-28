@@ -79,7 +79,6 @@ create table public.l_films_category
 alter table public.l_films_category
     owner to development;
 
-
 insert into public.l_films_category (films_id, category_id)
 values  (1, 6),
         (1, 4),
