@@ -40,6 +40,10 @@ public class BaseRepository {
         return jdbcURL;
     }
 
+    public void setDatabaseUrl(String jdbcURL) {
+        this.jdbcURL = jdbcURL;
+    }
+
     public String getDatabaseUser() {
         return username;
     }
@@ -50,9 +54,5 @@ public class BaseRepository {
 
     public String getDbName() {
         return dbName;
-    }
-
-    public void setDatabaseUrl(String jdbcURL) {
-        this.jdbcURL = jdbcURL;
     }
 }

@@ -2,8 +2,8 @@ package org.example.repository.impl;
 
 import org.example.entity.Category;
 import org.example.entity.Film;
-import org.example.repository.rowmapper.CategoryRowMapper;
 import org.example.repository.CategoryRepository;
+import org.example.repository.rowmapper.CategoryRowMapper;
 import org.example.util.BaseConnection;
 
 import java.sql.Connection;
