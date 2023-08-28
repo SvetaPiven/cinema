@@ -5,12 +5,12 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
-    <servlet-name>HelloWorldServlet</servlet-name>
+    <servlet-name>SvetaServlet</servlet-name>
     <servlet-class>org.example.servlet.jenkins.SvetaServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>HelloWorldServlet</servlet-name>
-    <url-pattern>/hello</url-pattern>
+    <servlet-name>SvetaServlet</servlet-name>
+    <url-pattern>/helloSveta</url-pattern>
   </servlet-mapping>
 </web-app>
