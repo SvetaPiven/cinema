@@ -34,7 +34,7 @@ public class LanguageServiceImpl implements LanguageService {
         List<Language> languages = languageRepository.findAll();
         return languages.stream()
                 .map(languageRowMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

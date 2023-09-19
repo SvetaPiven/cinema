@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 @PropertySource("classpath:application.properties")
 public class ApplicationProperties {
@@ -25,36 +23,8 @@ public class ApplicationProperties {
     @Value("${POOL_SIZE}")
     private Integer poolSize;
 
-    public ApplicationProperties(String driverName, String databaseUrl, String databaseLogin, String databasePassword, Integer poolSize) {
-        this.driverName = driverName;
-        this.databaseUrl = databaseUrl;
-        this.databaseLogin = databaseLogin;
-        this.databasePassword = databasePassword;
-        this.poolSize = poolSize;
-    }
+    public ApplicationProperties() {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ApplicationProperties that = (ApplicationProperties) o;
-        return Objects.equals(driverName, that.driverName) && Objects.equals(databaseUrl, that.databaseUrl) && Objects.equals(databaseLogin, that.databaseLogin) && Objects.equals(databasePassword, that.databasePassword) && Objects.equals(poolSize, that.poolSize);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(driverName, databaseUrl, databaseLogin, databasePassword, poolSize);
-    }
-
-    @Override
-    public String toString() {
-        return "ApplicationProperties{" +
-                "driverName='" + driverName + '\'' +
-                ", databaseUrl='" + databaseUrl + '\'' +
-                ", databaseLogin='" + databaseLogin + '\'' +
-                ", databasePassword='" + databasePassword + '\'' +
-                ", poolSize=" + poolSize +
-                '}';
     }
 
     public Integer getPoolSize() {
@@ -75,5 +45,25 @@ public class ApplicationProperties {
 
     public String getDatabasePassword() {
         return databasePassword;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public void setDatabaseUrl(String databaseUrl) {
+        this.databaseUrl = databaseUrl;
+    }
+
+    public void setDatabaseLogin(String databaseLogin) {
+        this.databaseLogin = databaseLogin;
+    }
+
+    public void setDatabasePassword(String databasePassword) {
+        this.databasePassword = databasePassword;
+    }
+
+    public void setPoolSize(Integer poolSize) {
+        this.poolSize = poolSize;
     }
 }

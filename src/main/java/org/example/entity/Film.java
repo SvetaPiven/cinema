@@ -21,6 +21,7 @@ public class Film {
     @Column
     private String title;
 
+    @Column(name = "language_id", nullable = false)
     private Long languageId;
 
 
