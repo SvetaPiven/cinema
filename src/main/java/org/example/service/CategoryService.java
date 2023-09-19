@@ -1,13 +1,19 @@
 package org.example.service;
 
-import org.example.entity.Category;
+import org.example.entity.dto.CategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
-    Category findById(Long id);
 
-    List<Category> findAll();
+    CategoryDto findById(Long id);
 
-    boolean delete(Long id);
+    List<CategoryDto> findAll();
+
+    CategoryDto create(CategoryDto categoryDto);
+
+    CategoryDto update(CategoryDto categoryDto, Long id);
+
+    void delete(Long id);
+
 }

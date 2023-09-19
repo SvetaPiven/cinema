@@ -1,17 +1,17 @@
 package org.example.service;
 
-import org.example.entity.Film;
+import org.example.entity.dto.FilmDto;
 
 import java.util.List;
 
 public interface FilmService {
-    List<Film> findAll();
+    FilmDto findById(Long id);
 
-    Film findById(Long id);
+    List<FilmDto> findAll();
 
-    boolean delete(Long id);
+    FilmDto create(FilmDto filmDto);
 
-    Film update(Film film);
+    FilmDto update(FilmDto filmDto, Long id);
 
-    Film create(Film film);
+    void delete(Long id);
 }

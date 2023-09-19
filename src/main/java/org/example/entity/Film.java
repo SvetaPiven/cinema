@@ -1,17 +1,28 @@
 package org.example.entity;
 
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "film")
 public class Film {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column
     private String title;
 
     private Long languageId;
 
-    private List<Category> categories;
 
     public Film() {
     }
@@ -27,11 +38,8 @@ public class Film {
         this.title = title;
     }
 
-    public Film(Long id, String title, Long languageId, List<Category> categories) {
+    public Film(Long id) {
         this.id = id;
-        this.title = title;
-        this.languageId = languageId;
-        this.categories = categories;
     }
 
     public Long getId() {
@@ -58,25 +66,18 @@ public class Film {
         this.languageId = languageId;
     }
 
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Film film = (Film) o;
-        return Objects.equals(id, film.id) && Objects.equals(title, film.title) && Objects.equals(languageId, film.languageId) && Objects.equals(categories, film.categories);
+        return Objects.equals(id, film.id) && Objects.equals(title, film.title) && Objects.equals(languageId, film.languageId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, languageId, categories);
+        return Objects.hash(id, title, languageId);
     }
 
     @Override
@@ -85,7 +86,6 @@ public class Film {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", languageId=" + languageId +
-                ", categories=" + categories +
                 '}';
     }
 }

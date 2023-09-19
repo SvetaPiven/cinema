@@ -1,13 +1,17 @@
 package org.example.service;
 
-import org.example.entity.Language;
+import org.example.entity.dto.LanguageDto;
 
 import java.util.List;
 
 public interface LanguageService {
-    List<Language> findAll();
+    LanguageDto findById(Long id);
 
-    Language findById(Long id);
+    List<LanguageDto> findAll();
 
-    boolean delete(Long id);
+    LanguageDto create(LanguageDto languageDto);
+
+    LanguageDto update(LanguageDto languageDto, Long id);
+
+    void delete(Long id);
 }
