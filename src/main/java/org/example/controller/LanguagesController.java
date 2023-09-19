@@ -49,6 +49,7 @@ public class LanguagesController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLanguageById(@PathVariable Long id) {
+        languageService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("Language deleted");
     }
 }

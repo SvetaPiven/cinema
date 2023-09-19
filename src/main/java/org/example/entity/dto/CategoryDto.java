@@ -11,7 +11,6 @@ public class CategoryDto implements Serializable {
     @NotNull(message = "Name must not be null")
     private String name;
 
-
     public CategoryDto(String name) {
         this.name = name;
 

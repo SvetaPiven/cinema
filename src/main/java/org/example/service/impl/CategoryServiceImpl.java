@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -41,7 +40,6 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto create(CategoryDto categoryDto) {
         Category category = categoryRowMapper.toEntity(categoryDto);
 
-        categoryRepository.saveAndFlush(category);
         return categoryRowMapper.toDto(categoryRepository.saveAndFlush(category));
     }
 

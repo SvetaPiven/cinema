@@ -1,7 +1,7 @@
 package org.example.service.impl;
 
-import org.example.entity.dto.LanguageDto;
 import org.example.entity.Language;
+import org.example.entity.dto.LanguageDto;
 import org.example.mapper.LanguageRowMapper;
 import org.example.repository.LanguageRepository;
 import org.example.service.LanguageService;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LanguageServiceImpl implements LanguageService {
@@ -41,7 +40,6 @@ public class LanguageServiceImpl implements LanguageService {
     public LanguageDto create(LanguageDto languageDto) {
         Language language = languageRowMapper.toEntity(languageDto);
 
-        languageRepository.saveAndFlush(language);
         return languageRowMapper.toDto(languageRepository.saveAndFlush(language));
     }
 

@@ -1,7 +1,7 @@
 package org.example.service.impl;
 
-import org.example.entity.dto.FilmDto;
 import org.example.entity.Film;
+import org.example.entity.dto.FilmDto;
 import org.example.mapper.FilmRowMapper;
 import org.example.repository.FilmRepository;
 import org.example.service.FilmService;
@@ -41,7 +41,6 @@ public class FilmServiceImpl implements FilmService {
     public FilmDto create(FilmDto filmDto) {
         Film film = filmRowMapper.toEntity(filmDto);
 
-        filmRepository.saveAndFlush(film);
         return filmRowMapper.toDto(filmRepository.saveAndFlush(film));
     }
 

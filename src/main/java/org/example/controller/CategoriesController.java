@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.entity.dto.CategoryDto;
+import org.example.repository.CategoryRepository;
 import org.example.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,16 +22,20 @@ import java.util.List;
 public class CategoriesController {
 
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoriesController(CategoryService categoryService) {
+    public CategoriesController(CategoryService categoryService,
+                                CategoryRepository categoryRepository) {
         this.categoryService = categoryService;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.findAll());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> findCategoryById(@PathVariable Long id) {
@@ -49,6 +54,7 @@ public class CategoriesController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable Long id) {
+        categoryService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("Category deleted");
     }
 }

@@ -31,39 +31,39 @@ public class ApplicationProperties {
         return poolSize;
     }
 
+    public void setPoolSize(Integer poolSize) {
+        this.poolSize = poolSize;
+    }
+
     public String getDriverName() {
         return driverName;
-    }
-
-    public String getDatabaseUrl() {
-        return databaseUrl;
-    }
-
-    public String getDatabaseLogin() {
-        return databaseLogin;
-    }
-
-    public String getDatabasePassword() {
-        return databasePassword;
     }
 
     public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
 
+    public String getDatabaseUrl() {
+        return databaseUrl;
+    }
+
     public void setDatabaseUrl(String databaseUrl) {
         this.databaseUrl = databaseUrl;
+    }
+
+    public String getDatabaseLogin() {
+        return databaseLogin;
     }
 
     public void setDatabaseLogin(String databaseLogin) {
         this.databaseLogin = databaseLogin;
     }
 
-    public void setDatabasePassword(String databasePassword) {
-        this.databasePassword = databasePassword;
+    public String getDatabasePassword() {
+        return databasePassword;
     }
 
-    public void setPoolSize(Integer poolSize) {
-        this.poolSize = poolSize;
+    public void setDatabasePassword(String databasePassword) {
+        this.databasePassword = databasePassword;
     }
 }
