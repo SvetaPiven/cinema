@@ -11,6 +11,22 @@ public class FilmDto implements Serializable {
     @NotNull(message = "Title must not be null")
     private String title;
 
+    @NotNull(message = "Id must not be null")
+    private Long languageId;
+
+    public FilmDto(String title, Long languageId) {
+        this.title = title;
+        this.languageId = languageId;
+    }
+
+    public Long getLanguageId() {
+        return languageId;
+    }
+
+    public void setLanguageId(Long languageId) {
+        this.languageId = languageId;
+    }
+
     public FilmDto() {
     }
 
@@ -26,11 +42,11 @@ public class FilmDto implements Serializable {
         this.title = title;
     }
 
-
     @Override
     public String toString() {
-        return "Film{" +
+        return "FilmDto{" +
                 "title='" + title + '\'' +
+                ", languageId=" + languageId +
                 '}';
     }
 }

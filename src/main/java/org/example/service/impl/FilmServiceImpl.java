@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmServiceImpl implements FilmService {
@@ -34,13 +33,13 @@ public class FilmServiceImpl implements FilmService {
         List<Film> films = filmRepository.findAll();
         return films.stream()
                 .map(filmRowMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public FilmDto create(FilmDto filmDto) {
         Film film = filmRowMapper.toEntity(filmDto);
-
+        setDefaultLanguage(film);
         return filmRowMapper.toDto(filmRepository.saveAndFlush(film));
     }
 
@@ -57,5 +56,11 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void delete(Long id) {
         filmRepository.deleteById(id);
+    }
+
+    private void setDefaultLanguage(Film film) {
+        if (film.getLanguageId() == null) {
+            film.setLanguageId(1L);
+        }
     }
 }
