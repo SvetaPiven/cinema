@@ -24,7 +24,6 @@ public class Film {
     @Column(name = "language_id", nullable = false)
     private Long languageId;
 
-
     public Film() {
     }
 

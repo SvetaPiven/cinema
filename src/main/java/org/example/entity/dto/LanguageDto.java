@@ -9,8 +9,10 @@ public class LanguageDto implements Serializable {
     @Size(min = 2, max = 256)
     @NotNull(message = "Name must not be null")
     private String name;
+
     public LanguageDto() {
     }
+
     public LanguageDto(String name) {
         this.name = name;
     }

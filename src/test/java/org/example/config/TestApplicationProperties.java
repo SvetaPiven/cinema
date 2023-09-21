@@ -1,4 +1,4 @@
-package org.example;
+package org.example.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,13 +11,13 @@ public class TestApplicationProperties {
     @Value("${driver.name}")
     private String driverName;
 
-    @Value("${database.url}")
+    @Value("${spring.datasource.url}")
     private String databaseUrl;
 
-    @Value("${database.login}")
+    @Value("${spring.datasource.username}")
     private String databaseLogin;
 
-    @Value("${database.password}")
+    @Value("${spring.datasource.password}")
     private String databasePassword;
 
     @Value("${POOL_SIZE}")

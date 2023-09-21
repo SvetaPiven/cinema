@@ -1,11 +1,14 @@
 package org.example.repository;
 
-import org.example.TestConfig;
+
+import org.example.config.TestConfig;
 import org.example.entity.Language;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,6 +36,16 @@ class LanguageRepositoryTests {
                     .withPassword("dev")
                     .withInitScript("migration/script.sql");
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @DynamicPropertySource
+    static void postgresProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+    }
+
+    @Autowired
     private LanguageRepository languageRepository;
 
     @BeforeAll
@@ -43,7 +55,7 @@ class LanguageRepositoryTests {
 
     @Test
     void testFindById() {
-        Long languageId = 10L;
+        Long languageId = 1L;
         Optional<Language> languageOptional = languageRepository.findById(languageId);
 
         assertTrue(languageOptional.isPresent());
@@ -58,12 +70,15 @@ class LanguageRepositoryTests {
     }
 
     @Test
-    void testDelete() {
-        Long id = 5L;
-        languageRepository.deleteById(id);
+    void testDeleteLanguage() {
+        Language language = new Language();
+        language.setName("Test Language");
+        language = languageRepository.save(language);
+        assertNotNull(language);
 
-        Optional<Language> deletedLanguage = languageRepository.findById(id);
-        assertFalse(deletedLanguage.isPresent());
+        languageRepository.deleteById(language.getId());
+
+        assertTrue(languageRepository.findById(language.getId()).isEmpty());
     }
 
     @Test

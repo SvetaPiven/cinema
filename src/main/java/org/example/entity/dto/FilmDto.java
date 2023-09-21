@@ -19,19 +19,19 @@ public class FilmDto implements Serializable {
         this.languageId = languageId;
     }
 
+    public FilmDto() {
+    }
+
+    public FilmDto(String title) {
+        this.title = title;
+    }
+
     public Long getLanguageId() {
         return languageId;
     }
 
     public void setLanguageId(Long languageId) {
         this.languageId = languageId;
-    }
-
-    public FilmDto() {
-    }
-
-    public FilmDto(String title) {
-        this.title = title;
     }
 
     public String getTitle() {
